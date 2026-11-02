@@ -8,6 +8,9 @@ works, you propose it to Labs and link your copy, and a team member builds the L
 Nothing is published from your copy. It has no workflows that run, and it needs no secrets: the image you build and
 run locally is the evidence that your app works in the LinuxServer container design.
 
+The whole process, from what qualifies to what happens after you propose, is in
+[Get your app into Labs](https://linuxserverlabs-playground.github.io/site/propose/).
+
 The kit follows the same layout as every LinuxServer image:
 
 | Path | What it is |
