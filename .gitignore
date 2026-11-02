@@ -1,0 +1,4 @@
+# builder render writes the workflows a Labs repository runs. They are not meant to run in your copy (there is
+# nothing to publish from it), so they stay out of git here.
+.github/workflows/
+.builder-out/

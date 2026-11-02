@@ -1,0 +1,92 @@
+# The manifest for this image. Schema: https://github.com/linuxserver-playground/builder/blob/main/schemas/image.schema.json
+# Every value marked TODO is a placeholder for your app; GETTING-STARTED.md walks through them. The README, the
+# build workflow and the site's image page are all generated from this file.
+schema: 1
+# TODO: the image name: lowercase letters, digits and dashes. Your repository is docker-<name>.
+name: myapp
+
+# TODO: GitHub logins without the @: you, and anyone who maintains the image with you. Credit, never access.
+maintainers:
+- your-github-login
+
+# TODO: what the app is, in a sentence or two, with a link to its homepage. Markdown.
+summary: |-
+  [MyApp](https://example.org) is a self-hosted web application that does one thing well.
+
+upstream:
+  # TODO: the project's homepage
+  url: https://example.org
+  version:
+    # How new releases are found: the latest stable GitHub release of this repository. Its tag is passed to the
+    # Dockerfiles as build.version_arg.
+    type: github_release
+    # TODO: owner/repo of the upstream project, owned by an organisation
+    repo: example-org/myapp
+    # TODO: one regex per release asset the Dockerfiles download, matched against the file name. A build waits
+    # until every one is uploaded. Drop the arm64 entry if you only build amd64.
+    require_assets:
+    - asset: '^myapp-.*-linux-amd64\.tar\.gz$'
+    - asset: '^myapp-.*-linux-arm64\.tar\.gz$'
+  notes:
+    type: github_release
+    # TODO: the same repository
+    repo: example-org/myapp
+
+release:
+  branch: main
+  tag: latest
+  channel: stable
+
+build:
+  base: alpine
+  # TODO: the ARG the Dockerfiles read the release tag from
+  version_arg: MYAPP_RELEASE
+  # TODO: amd64 only is allowed; then delete Dockerfile.aarch64 too
+  platforms:
+  - amd64
+  - arm64
+
+# What the pipeline's smoke test checks: every service stays up and the web interface answers below 500.
+test:
+  startup_timeout: 120
+  web:
+    # TODO: the web interface's port
+    port: 8080
+
+runtime:
+  ports:
+  # TODO: the web interface's port again, and any other port users publish
+  - internal: '8080'
+    description: Web interface.
+  volumes:
+  - path: /config
+    host_path: /path/to/myapp/config
+    description: Configuration and data.
+  # TODO: environment variables users may set, or delete this list
+  env:
+  - name: MYAPP_EXAMPLE
+    value: 'false'
+    description: An example setting; replace it with your app's or delete it.
+    optional: true
+
+docs:
+  # TODO: one or two categories, such as Dashboard, Media, Productivity, Development
+  categories:
+  - Productivity
+  # TODO: a square logo URL, or delete the line
+  logo: https://example.org/logo.png
+  # TODO: what a user does after starting the container: where the web interface is, the default login or setup
+  # wizard. Markdown.
+  setup: |
+    Access the web interface at http://yourhost:8080/.
+
+# How SWAG reverse proxies the app. TODO: the web port, and whether the app works under a subfolder.
+proxy:
+  port: 8080
+  subdomain: true
+  subfolder:
+    supported: false
+
+changelog:
+- date: '2026-11-02'
+  text: Initial release.

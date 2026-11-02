@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# The app itself, in the foreground, as abc. TODO: replace the command and its flags with your app's: it must
+# listen on all interfaces on the port in image.yml and keep all of its state under /config. The -c probe marks
+# the service ready once the port answers.
+
+exec \
+    s6-notifyoncheck -d -n 300 -w 1000 -c "nc -z localhost 8080" \
+        s6-setuidgid abc /app/myapp/myapp \
+        --address 0.0.0.0 \
+        --port 8080 \
+        --data /config/data

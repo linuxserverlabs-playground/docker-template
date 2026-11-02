@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bash
+# shellcheck shell=bash
+
+# Runs once as root on every start, before any service. Make the folders the app writes to under /config and give
+# them to abc, the user the service runs as (PUID/PGID). TODO: add any first-run setup, such as copying a default
+# config file into /config when none exists.
+
+mkdir -p \
+    /config/data
+
+lsiown -R abc:abc \
+    /config

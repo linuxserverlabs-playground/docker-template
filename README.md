@@ -1,13 +1,10 @@
-# Image pending approval
+# LinuxServer Labs image starter kit
 
-This repository will hold a [LinuxServer Labs](https://linuxserverlabs-playground.github.io/site/) container image.
-Labs publishes images of open-source, self-hosted applications that are new or not yet well known, built and tested
-on the same pipeline as LinuxServer.io.
+A starting point for packaging your application as a
+[LinuxServer Labs](https://linuxserverlabs-playground.github.io/site/) container image: a web app on an s6 service,
+on a LinuxServer playground base image, with a variant for desktop apps that run in the browser.
 
-The image is in review. It lives in this repository's first pull request, which builds and tests it and posts a
-report with screenshots and a pull command, so you can try it before it is released. Nothing is published from this
-branch until a team member merges that pull request.
+Create your own copy with **Use this template**, then follow **[GETTING-STARTED.md](GETTING-STARTED.md)** to fill
+it in, build and run it locally, check it with `builder`, and propose it to Labs.
 
-Proposal: <link>
-
-To suggest an image of your own, see [how proposals work](https://github.com/linuxserverlabs-playground/proposals#readme).
+This README is a placeholder: `builder render` replaces it with your image's generated README.

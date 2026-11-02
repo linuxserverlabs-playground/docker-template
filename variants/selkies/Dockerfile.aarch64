@@ -1,0 +1,54 @@
+# syntax=docker/dockerfile:1
+
+# The playground's Selkies base: a desktop in the browser on ports 3000 (http) and 3001 (https), s6-overlay, the abc
+# user (PUID/PGID), /config as the desktop user's home.
+FROM ghcr.io/linuxserver-playground/baseimage-selkies:arm64v8-ubunturesolute
+
+# set version label
+ARG BUILD_DATE
+ARG VERSION
+# TODO: <APP>_RELEASE, the name in image.yml build.version_arg. The pipeline passes the release tag it resolved.
+ARG MYAPP_RELEASE
+LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+# TODO: your GitHub login
+LABEL maintainer="your-github-login"
+
+# title
+# TODO: the app's name, shown as the browser tab's title
+ENV TITLE=MyApp \
+    NO_GAMEPAD=true \
+    PIXELFLUX_WAYLAND=true
+
+# TODO: the icon URL, the upstream repository (twice) and this architecture's release asset. With no MYAPP_RELEASE
+# (a plain local build) the latest release is used. Add the libraries the app needs to apt-get install.
+RUN \
+  echo "**** add icon ****" && \
+  curl -o \
+    /usr/share/selkies/www/icon.png \
+    https://example.org/logo.png && \
+  echo "**** install myapp ****" && \
+  if [ -z ${MYAPP_RELEASE+x} ]; then \
+    MYAPP_RELEASE=$(curl -sX GET "https://api.github.com/repos/example-org/myapp/releases/latest" \
+      | jq -r '.tag_name'); \
+  fi && \
+  curl -o \
+    /tmp/myapp.deb -fL \
+    "https://github.com/example-org/myapp/releases/download/${MYAPP_RELEASE}/myapp-${MYAPP_RELEASE#v}-linux-aarch64.deb" && \
+  apt-get update && \
+  apt-get install -y --no-install-recommends \
+    /tmp/myapp.deb && \
+  printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
+  echo "**** cleanup ****" && \
+  apt-get autoclean && \
+  rm -rf \
+    /config/.cache \
+    /var/lib/apt/lists/* \
+    /var/tmp/* \
+    /tmp/*
+
+# add local files
+COPY root/ /
+
+# ports and volumes
+EXPOSE 3001
+VOLUME /config
